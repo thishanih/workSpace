@@ -126,6 +126,10 @@ accept `page` and `page_size` query parameters. Data access is scoped to the
 authenticated user. The built-in rate limiter is process-local; use a shared
 rate-limiting store if deploying multiple workers.
 
+Import `postman/todo-api.postman_collection.json` into Postman to try the
+endpoints. Run **Auth → Register** first; it saves the access token used by
+protected requests.
+
 ## Run integration tests
 
 ```bash
