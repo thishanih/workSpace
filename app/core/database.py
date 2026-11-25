@@ -1,3 +1,4 @@
+import certifi
 from pymongo import MongoClient
 from pymongo.database import Database
 from starlette.requests import Request
@@ -8,6 +9,7 @@ from app.core.config import settings
 def create_mongo_client() -> MongoClient:
     return MongoClient(
         settings.mongo_uri,
+        tlsCAFile=certifi.where(),
         serverSelectionTimeoutMS=5000,
         connectTimeoutMS=5000,
     )
