@@ -105,8 +105,9 @@ requests require `Authorization: Bearer <access_token>`.
 | Method | Endpoint | Purpose |
 | --- | --- | --- |
 | `GET` | `/health` | Health check |
-| `POST` | `/auth/register` | Register and receive an access token |
-| `POST` | `/auth/login` | Sign in and receive an access token |
+| `POST` | `/auth/register` | Register and receive access and refresh tokens |
+| `POST` | `/auth/login` | Sign in and receive access and refresh tokens |
+| `POST` | `/auth/refresh` | Rotate a refresh token and receive a new token pair |
 | `GET` | `/users/me` | Read the current user profile |
 | `PATCH` | `/users/me` | Update the current user's name |
 | `GET` | `/todos` | List the current user's todos |
@@ -127,8 +128,46 @@ authenticated user. The built-in rate limiter is process-local; use a shared
 rate-limiting store if deploying multiple workers.
 
 Import `postman/todo-api.postman_collection.json` into Postman to try the
-endpoints. Run **Auth → Register** first; it saves the access token used by
-protected requests.
+endpoints. Run **Auth → Register** first; it saves the access and refresh
+tokens. The access token is used by protected requests. When it expires, send
+the current refresh token to `/auth/refresh`; each successful refresh rotates
+the refresh token, so clients must replace both saved tokens with the response.
+Refresh tokens expire after seven days by default (`REFRESH_TOKEN_EXPIRE_DAYS`)
+and can only be used once.
+
+## Connect the Postman MCP server in VS Code
+
+The workspace includes `.vscode/mcp.json` configured for Postman's full US
+remote MCP endpoint (`https://mcp.postman.com/mcp`). In VS Code, start the
+`postman` MCP server from the MCP servers view and complete the OAuth sign-in
+prompt. To make this API's requests available to the MCP server, import
+`postman/todo-api.postman_collection.json` into a Postman workspace first. Set
+the collection's `baseUrl` variable to `http://127.0.0.1:8000`.
+
+The configured Postman workspace has a `Fast API` collection with requests and
+saved success-response examples for all 17 API endpoints above. The local
+collection export is `postman/todo-api.postman_collection.json`. Token values
+in saved auth responses are placeholders, not valid credentials. Ask Copilot
+to inspect the `Fast API` collection with prompts such as:
+
+```text
+Using the Postman MCP server, list every request in the Fast API collection,
+grouped by folder, with its HTTP method and URL.
+```
+
+```text
+Using the Postman MCP server, show the request details and example body for
+each request in Auth, Users, Todos, Comments, and Activities in the Fast API
+collection. Include the Health Check request too.
+```
+
+The collection includes requests for `GET /api/health`; register, login, and
+refresh under `/api/auth`; profile read and update under `/api/users/me`; list,
+create, read, update, and delete under `/api/todos`; list, create, update, and
+delete under `/api/todos/{todo_id}/comments`; and list and read under
+`/api/activities`. Run the requests from Postman after reviewing them. Register
+or log in first to populate the saved tokens, and create a todo before trying
+requests that use `todoId`.
 
 ## Spec-driven development
 

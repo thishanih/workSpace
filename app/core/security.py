@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+from uuid import uuid4
 
 import jwt
 from pwdlib import PasswordHash
@@ -32,10 +33,34 @@ def create_access_token(subject: str) -> str:
     now = datetime.now(timezone.utc)
     expires_at = now + timedelta(minutes=settings.access_token_expire_minutes)
     return jwt.encode(
-        {"sub": subject, "iat": now, "exp": expires_at},
+        {
+            "sub": subject,
+            "iat": now,
+            "exp": expires_at,
+            "token_use": "access",
+            "jti": uuid4().hex,
+        },
         _jwt_secret(),
         algorithm=settings.jwt_algorithm,
     )
+
+
+def create_refresh_token(subject: str) -> tuple[str, str, datetime]:
+    now = datetime.now(timezone.utc)
+    expires_at = now + timedelta(days=settings.refresh_token_expire_days)
+    token_id = uuid4().hex
+    token = jwt.encode(
+        {
+            "sub": subject,
+            "iat": now,
+            "exp": expires_at,
+            "token_use": "refresh",
+            "jti": token_id,
+        },
+        _jwt_secret(),
+        algorithm=settings.jwt_algorithm,
+    )
+    return token, token_id, expires_at
 
 
 def decode_access_token(token: str) -> str | None:
@@ -50,4 +75,28 @@ def decode_access_token(token: str) -> str | None:
         return None
 
     subject = payload.get("sub")
+    if payload.get("token_use", "access") != "access":
+        return None
     return subject if isinstance(subject, str) else None
+
+
+def decode_refresh_token(token: str) -> tuple[str, str] | None:
+    try:
+        payload = jwt.decode(
+            token,
+            _jwt_secret(),
+            algorithms=[settings.jwt_algorithm],
+            options={"require": ["exp", "sub", "token_use", "jti"]},
+        )
+    except jwt.InvalidTokenError:
+        return None
+
+    subject = payload.get("sub")
+    token_id = payload.get("jti")
+    if (
+        payload.get("token_use") != "refresh"
+        or not isinstance(subject, str)
+        or not isinstance(token_id, str)
+    ):
+        return None
+    return subject, token_id

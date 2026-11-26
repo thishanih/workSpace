@@ -9,7 +9,7 @@ from starlette.responses import Response
 
 from app.core.config import settings
 
-_AUTH_PATHS = {"/api/auth/register", "/api/auth/login"}
+_AUTH_PATHS = {"/api/auth/register", "/api/auth/login", "/api/auth/refresh"}
 
 
 class RateLimitMiddleware(BaseHTTPMiddleware):

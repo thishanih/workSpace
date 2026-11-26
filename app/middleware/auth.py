@@ -9,6 +9,7 @@ _PUBLIC_PATHS = {
     "/api/health",
     "/api/auth/register",
     "/api/auth/login",
+    "/api/auth/refresh",
 }
 
 
