@@ -1,47 +1,14 @@
-from collections.abc import Iterator
-
-import mongomock
-import pytest
 from fastapi.testclient import TestClient
-from pydantic import SecretStr
-
-from app.core.config import settings
-from app.core.database import get_database
-from app.main import app
 
 
-@pytest.fixture
-def client(monkeypatch: pytest.MonkeyPatch) -> Iterator[TestClient]:
-    mongo_client = mongomock.MongoClient()
-    database = mongo_client["todo_api_test"]
-    app.dependency_overrides[get_database] = lambda: database
-    monkeypatch.setattr(
-        settings,
-        "jwt_secret_key",
-        SecretStr("test-secret-key-with-at-least-32-characters"),
-    )
-    monkeypatch.setattr(settings, "auth_rate_limit_requests", 100)
-
-    try:
-        with TestClient(app) as test_client:
-            yield test_client
-    finally:
-        app.dependency_overrides.clear()
-        mongo_client.close()
-
-
-def _register(client: TestClient, email: str) -> tuple[str, str]:
-    response = client.post(
-        "/api/auth/register",
-        json={"email": email, "name": "Test User", "password": "valid-password"},
-    )
-    assert response.status_code == 201
-    payload = response.json()
-    return payload["access_token"], payload["user"]["id"]
-
-
-def test_todo_comment_and_activity_flow(client: TestClient) -> None:
-    token, user_id = _register(client, "test@example.com")
+def test_todo_comment_and_activity_flow(
+    client: TestClient,
+    register_user,
+    create_comment,
+) -> None:
+    account = register_user("test@example.com")
+    token = account["access_token"]
+    user_id = account["user"]["id"]
     headers = {"Authorization": f"Bearer {token}"}
 
     login = client.post(
@@ -83,13 +50,7 @@ def test_todo_comment_and_activity_flow(client: TestClient) -> None:
     )
     assert null_title.status_code == 422
 
-    comment_response = client.post(
-        f"/api/todos/{todo['id']}/comments",
-        headers=headers,
-        json={"body": "Finished"},
-    )
-    assert comment_response.status_code == 201
-    comment = comment_response.json()
+    comment = create_comment(token, todo["id"])
 
     comments = client.get(
         f"/api/todos/{todo['id']}/comments",
@@ -116,9 +77,12 @@ def test_todo_comment_and_activity_flow(client: TestClient) -> None:
     assert final_activities.json()["total"] == 5
 
 
-def test_users_cannot_access_another_users_todos(client: TestClient) -> None:
-    owner_token, _ = _register(client, "owner@example.com")
-    other_token, _ = _register(client, "other@example.com")
+def test_users_cannot_access_another_users_todos(
+    client: TestClient,
+    register_user,
+) -> None:
+    owner_token = register_user("owner@example.com")["access_token"]
+    other_token = register_user("other@example.com")["access_token"]
 
     created = client.post(
         "/api/todos",
@@ -134,8 +98,11 @@ def test_users_cannot_access_another_users_todos(client: TestClient) -> None:
     assert response.status_code == 404
 
 
-def test_registration_rejects_duplicate_email(client: TestClient) -> None:
-    _register(client, "duplicate@example.com")
+def test_registration_rejects_duplicate_email(
+    client: TestClient,
+    register_user,
+) -> None:
+    register_user("duplicate@example.com")
     duplicate = client.post(
         "/api/auth/register",
         json={
@@ -147,8 +114,11 @@ def test_registration_rejects_duplicate_email(client: TestClient) -> None:
     assert duplicate.status_code == 409
 
 
-def test_refresh_rotates_tokens_and_rejects_reuse(client: TestClient) -> None:
-    _register(client, "refresh@example.com")
+def test_refresh_rotates_tokens_and_rejects_reuse(
+    client: TestClient,
+    register_user,
+) -> None:
+    register_user("refresh@example.com")
     login = client.post(
         "/api/auth/login",
         json={"email": "refresh@example.com", "password": "valid-password"},
