@@ -1,4 +1,4 @@
-# Todo API
+# Workspace API
 
 A FastAPI todo API with MongoDB persistence, JWT authentication, todos, comments,
 and activity history.

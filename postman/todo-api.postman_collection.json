@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "Todo API",
-    "description": "Postman requests for the FastAPI Todo API. Start the API and MongoDB before sending requests.",
+    "name": "Workspace API",
+    "description": "Postman requests for the FastAPI Workspace API. Start the API and MongoDB before sending requests.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "auth": {
@@ -87,7 +87,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"{{$randomEmail}}\",\n  \"name\": \"Todo API User\",\n  \"password\": \"change-this-password\"\n}",
+              "raw": "{\n  \"email\": \"{{$randomEmail}}\",\n  \"name\": \"Workspace API User\",\n  \"password\": \"change-this-password\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -126,7 +126,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"access_token\": \"<access-token>\",\n  \"refresh_token\": \"<refresh-token>\",\n  \"token_type\": \"bearer\",\n  \"user\": {\n    \"id\": \"64a000000000000000000001\",\n    \"email\": \"postman@example.com\",\n    \"name\": \"Todo API User\",\n    \"created_at\": \"2026-01-15T10:30:00Z\"\n  }\n}",
+              "body": "{\n  \"access_token\": \"<access-token>\",\n  \"refresh_token\": \"<refresh-token>\",\n  \"token_type\": \"bearer\",\n  \"user\": {\n    \"id\": \"64a000000000000000000001\",\n    \"email\": \"postman@example.com\",\n    \"name\": \"Workspace API User\",\n    \"created_at\": \"2026-01-15T10:30:00Z\"\n  }\n}",
               "originalRequest": {
                 "auth": {
                   "type": "noauth"
@@ -140,7 +140,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"email\": \"{{$randomEmail}}\",\n  \"name\": \"Todo API User\",\n  \"password\": \"change-this-password\"\n}",
+                  "raw": "{\n  \"email\": \"{{$randomEmail}}\",\n  \"name\": \"Workspace API User\",\n  \"password\": \"change-this-password\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -205,7 +205,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"access_token\": \"<access-token>\",\n  \"refresh_token\": \"<refresh-token>\",\n  \"token_type\": \"bearer\",\n  \"user\": {\n    \"id\": \"64a000000000000000000001\",\n    \"email\": \"postman@example.com\",\n    \"name\": \"Todo API User\",\n    \"created_at\": \"2026-01-15T10:30:00Z\"\n  }\n}",
+              "body": "{\n  \"access_token\": \"<access-token>\",\n  \"refresh_token\": \"<refresh-token>\",\n  \"token_type\": \"bearer\",\n  \"user\": {\n    \"id\": \"64a000000000000000000001\",\n    \"email\": \"postman@example.com\",\n    \"name\": \"Workspace API User\",\n    \"created_at\": \"2026-01-15T10:30:00Z\"\n  }\n}",
               "originalRequest": {
                 "auth": {
                   "type": "noauth"
@@ -284,7 +284,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"access_token\": \"<access-token>\",\n  \"refresh_token\": \"<refresh-token>\",\n  \"token_type\": \"bearer\",\n  \"user\": {\n    \"id\": \"64a000000000000000000001\",\n    \"email\": \"postman@example.com\",\n    \"name\": \"Todo API User\",\n    \"created_at\": \"2026-01-15T10:30:00Z\"\n  }\n}",
+              "body": "{\n  \"access_token\": \"<access-token>\",\n  \"refresh_token\": \"<refresh-token>\",\n  \"token_type\": \"bearer\",\n  \"user\": {\n    \"id\": \"64a000000000000000000001\",\n    \"email\": \"postman@example.com\",\n    \"name\": \"Workspace API User\",\n    \"created_at\": \"2026-01-15T10:30:00Z\"\n  }\n}",
               "originalRequest": {
                 "auth": {
                   "type": "noauth"
@@ -334,7 +334,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"id\": \"64a000000000000000000001\",\n  \"email\": \"postman@example.com\",\n  \"name\": \"Todo API User\",\n  \"created_at\": \"2026-01-15T10:30:00Z\"\n}",
+              "body": "{\n  \"id\": \"64a000000000000000000001\",\n  \"email\": \"postman@example.com\",\n  \"name\": \"Workspace API User\",\n  \"created_at\": \"2026-01-15T10:30:00Z\"\n}",
               "originalRequest": {
                 "method": "GET",
                 "url": "{{baseUrl}}/api/users/me"
@@ -354,7 +354,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Updated Todo API User\"\n}",
+              "raw": "{\n  \"name\": \"Updated Workspace API User\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -376,7 +376,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"id\": \"64a000000000000000000001\",\n  \"email\": \"postman@example.com\",\n  \"name\": \"Updated Todo API User\",\n  \"created_at\": \"2026-01-15T10:30:00Z\"\n}",
+              "body": "{\n  \"id\": \"64a000000000000000000001\",\n  \"email\": \"postman@example.com\",\n  \"name\": \"Updated Workspace API User\",\n  \"created_at\": \"2026-01-15T10:30:00Z\"\n}",
               "originalRequest": {
                 "method": "PATCH",
                 "header": [
@@ -387,7 +387,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"name\": \"Updated Todo API User\"\n}",
+                  "raw": "{\n  \"name\": \"Updated Workspace API User\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -423,7 +423,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"items\": [\n    {\n      \"id\": \"64a000000000000000000002\",\n      \"title\": \"Try the Todo API\",\n      \"description\": \"Created from Postman\",\n      \"status\": \"pending\",\n      \"created_at\": \"2026-01-15T10:35:00Z\",\n      \"updated_at\": \"2026-01-15T10:35:00Z\"\n    }\n  ],\n  \"page\": 1,\n  \"page_size\": 20,\n  \"total\": 1\n}",
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"64a000000000000000000002\",\n      \"title\": \"Try the Workspace API\",\n      \"description\": \"Created from Postman\",\n      \"status\": \"pending\",\n      \"created_at\": \"2026-01-15T10:35:00Z\",\n      \"updated_at\": \"2026-01-15T10:35:00Z\"\n    }\n  ],\n  \"page\": 1,\n  \"page_size\": 20,\n  \"total\": 1\n}",
               "originalRequest": {
                 "method": "GET",
                 "url": "{{baseUrl}}/api/todos?page=1&page_size=20"
@@ -443,7 +443,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Try the Todo API\",\n  \"description\": \"Created from Postman\",\n  \"status\": \"pending\"\n}",
+              "raw": "{\n  \"title\": \"Try the Workspace API\",\n  \"description\": \"Created from Postman\",\n  \"status\": \"pending\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -479,7 +479,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"id\": \"64a000000000000000000002\",\n  \"title\": \"Try the Todo API\",\n  \"description\": \"Created from Postman\",\n  \"status\": \"pending\",\n  \"created_at\": \"2026-01-15T10:35:00Z\",\n  \"updated_at\": \"2026-01-15T10:35:00Z\"\n}",
+              "body": "{\n  \"id\": \"64a000000000000000000002\",\n  \"title\": \"Try the Workspace API\",\n  \"description\": \"Created from Postman\",\n  \"status\": \"pending\",\n  \"created_at\": \"2026-01-15T10:35:00Z\",\n  \"updated_at\": \"2026-01-15T10:35:00Z\"\n}",
               "originalRequest": {
                 "method": "POST",
                 "header": [
@@ -490,7 +490,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"title\": \"Try the Todo API\",\n  \"description\": \"Created from Postman\",\n  \"status\": \"pending\"\n}",
+                  "raw": "{\n  \"title\": \"Try the Workspace API\",\n  \"description\": \"Created from Postman\",\n  \"status\": \"pending\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -521,7 +521,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"id\": \"64a000000000000000000002\",\n  \"title\": \"Try the Todo API\",\n  \"description\": \"Created from Postman\",\n  \"status\": \"pending\",\n  \"created_at\": \"2026-01-15T10:35:00Z\",\n  \"updated_at\": \"2026-01-15T10:35:00Z\"\n}",
+              "body": "{\n  \"id\": \"64a000000000000000000002\",\n  \"title\": \"Try the Workspace API\",\n  \"description\": \"Created from Postman\",\n  \"status\": \"pending\",\n  \"created_at\": \"2026-01-15T10:35:00Z\",\n  \"updated_at\": \"2026-01-15T10:35:00Z\"\n}",
               "originalRequest": {
                 "method": "GET",
                 "url": "{{baseUrl}}/api/todos/{{todoId}}"
@@ -563,7 +563,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"id\": \"64a000000000000000000002\",\n  \"title\": \"Try the Todo API\",\n  \"description\": \"Created from Postman\",\n  \"status\": \"completed\",\n  \"created_at\": \"2026-01-15T10:35:00Z\",\n  \"updated_at\": \"2026-01-15T10:40:00Z\"\n}",
+              "body": "{\n  \"id\": \"64a000000000000000000002\",\n  \"title\": \"Try the Workspace API\",\n  \"description\": \"Created from Postman\",\n  \"status\": \"completed\",\n  \"created_at\": \"2026-01-15T10:35:00Z\",\n  \"updated_at\": \"2026-01-15T10:40:00Z\"\n}",
               "originalRequest": {
                 "method": "PATCH",
                 "header": [
@@ -828,7 +828,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"items\": [\n    {\n      \"id\": \"64a000000000000000000004\",\n      \"todo_id\": \"64a000000000000000000002\",\n      \"actor_id\": \"64a000000000000000000001\",\n      \"action\": \"created\",\n      \"entity_type\": \"todo\",\n      \"entity_id\": \"64a000000000000000000002\",\n      \"summary\": \"Created todo: Try the Todo API\",\n      \"created_at\": \"2026-01-15T10:35:00Z\"\n    }\n  ],\n  \"page\": 1,\n  \"page_size\": 20,\n  \"total\": 1\n}",
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"64a000000000000000000004\",\n      \"todo_id\": \"64a000000000000000000002\",\n      \"actor_id\": \"64a000000000000000000001\",\n      \"action\": \"created\",\n      \"entity_type\": \"todo\",\n      \"entity_id\": \"64a000000000000000000002\",\n      \"summary\": \"Created todo: Try the Workspace API\",\n      \"created_at\": \"2026-01-15T10:35:00Z\"\n    }\n  ],\n  \"page\": 1,\n  \"page_size\": 20,\n  \"total\": 1\n}",
               "originalRequest": {
                 "method": "GET",
                 "url": "{{baseUrl}}/api/activities?page=1&page_size=20"
@@ -855,7 +855,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"id\": \"64a000000000000000000004\",\n  \"todo_id\": \"64a000000000000000000002\",\n  \"actor_id\": \"64a000000000000000000001\",\n  \"action\": \"created\",\n  \"entity_type\": \"todo\",\n  \"entity_id\": \"64a000000000000000000002\",\n  \"summary\": \"Created todo: Try the Todo API\",\n  \"created_at\": \"2026-01-15T10:35:00Z\"\n}",
+              "body": "{\n  \"id\": \"64a000000000000000000004\",\n  \"todo_id\": \"64a000000000000000000002\",\n  \"actor_id\": \"64a000000000000000000001\",\n  \"action\": \"created\",\n  \"entity_type\": \"todo\",\n  \"entity_id\": \"64a000000000000000000002\",\n  \"summary\": \"Created todo: Try the Workspace API\",\n  \"created_at\": \"2026-01-15T10:35:00Z\"\n}",
               "originalRequest": {
                 "method": "GET",
                 "url": "{{baseUrl}}/api/activities/{{activityId}}"
