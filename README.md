@@ -169,6 +169,54 @@ delete under `/api/todos/{todo_id}/comments`; and list and read under
 or log in first to populate the saved tokens, and create a todo before trying
 requests that use `todoId`.
 
+## Spec-driven development
+
+This project includes GitHub Spec Kit skills for Copilot. Open the project in
+VS Code, start a new Copilot chat, and run these commands **in the chat**, one
+at a time:
+
+1. `/speckit-constitution` — establish the project's principles.
+2. `/speckit-specify <feature description>` — create a feature spec.
+3. `/speckit-plan` — create an implementation plan.
+4. `/speckit-tasks` — break the plan into tasks.
+5. `/speckit-implement` — implement the tasks.
+6. `/speckit-converge` — check for remaining work.
+
+If the skills do not appear, reload VS Code and start a new chat. See the
+[Spec Kit quickstart](https://github.github.io/spec-kit/quickstart.html) for
+optional clarification and review steps.
+
+For new or changed API endpoints, update
+[`postman/todo-api.postman_collection.json`](postman/todo-api.postman_collection.json)
+and verify the request against the implemented endpoint before marking the
+feature complete. Use the existing Postman MCP server when needed and
+available; it is not required to update the repository collection.
+
+Alternatively, write specs manually. For new features and behavior changes,
+agree on a spec before changing application code. Keep each feature's artifacts
+together in
+`specs/<feature-name>/`:
+
+1. Copy [`specs/template.md`](specs/template.md) to
+   `specs/<feature-name>/spec.md`.
+2. Describe the user problem, desired behavior, and observable acceptance
+   criteria. For API changes, include routes, request/response shapes,
+   authentication and authorization, validation and error behavior, and any
+   persistence or compatibility implications.
+3. Break the accepted criteria into small, verifiable tasks in the spec.
+   Identify the tests and documentation needed to prove each criterion.
+4. Implement only after the spec is clear. Update task checkboxes as work
+   progresses, and adjust the spec when implementation reveals a necessary
+   change.
+5. Before considering the feature done, run the relevant checks from
+   [Run integration tests](#run-integration-tests) and
+   [Checks before committing](#checks-before-committing), then verify every
+   acceptance criterion.
+
+Keep specs focused on behavior rather than prescribing unnecessary
+implementation details. Record unresolved product decisions as open questions
+instead of silently choosing a behavior.
+
 ## Run integration tests
 
 ```bash
