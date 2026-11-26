@@ -17,6 +17,7 @@ def create_mongo_client() -> MongoClient:
 
 def initialize_indexes(database: Database) -> None:
     database["users"].create_index("email", unique=True)
+    database["refresh_tokens"].create_index("expires_at", expireAfterSeconds=0)
     database["todos"].create_index([("owner_id", 1), ("created_at", -1)])
     database["comments"].create_index([("todo_id", 1), ("created_at", -1)])
     database["activities"].create_index([("owner_id", 1), ("created_at", -1)])

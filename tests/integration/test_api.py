@@ -145,3 +145,50 @@ def test_registration_rejects_duplicate_email(client: TestClient) -> None:
         },
     )
     assert duplicate.status_code == 409
+
+
+def test_refresh_rotates_tokens_and_rejects_reuse(client: TestClient) -> None:
+    _register(client, "refresh@example.com")
+    login = client.post(
+        "/api/auth/login",
+        json={"email": "refresh@example.com", "password": "valid-password"},
+    )
+    assert login.status_code == 200
+    initial_tokens = login.json()
+    assert initial_tokens["refresh_token"]
+
+    refreshed = client.post(
+        "/api/auth/refresh",
+        json={"refresh_token": initial_tokens["refresh_token"]},
+    )
+    assert refreshed.status_code == 200
+    refreshed_tokens = refreshed.json()
+    assert refreshed_tokens["access_token"] != initial_tokens["access_token"]
+    assert refreshed_tokens["refresh_token"] != initial_tokens["refresh_token"]
+
+    reused = client.post(
+        "/api/auth/refresh",
+        json={"refresh_token": initial_tokens["refresh_token"]},
+    )
+    assert reused.status_code == 401
+
+    refresh_as_access = client.get(
+        "/api/users/me",
+        headers={"Authorization": f"Bearer {refreshed_tokens['refresh_token']}"},
+    )
+    assert refresh_as_access.status_code == 401
+
+    profile = client.get(
+        "/api/users/me",
+        headers={"Authorization": f"Bearer {refreshed_tokens['access_token']}"},
+    )
+    assert profile.status_code == 200
+
+
+def test_refresh_rejects_invalid_token(client: TestClient) -> None:
+    response = client.post(
+        "/api/auth/refresh",
+        json={"refresh_token": "not-a-valid-token"},
+    )
+
+    assert response.status_code == 401

@@ -105,8 +105,9 @@ requests require `Authorization: Bearer <access_token>`.
 | Method | Endpoint | Purpose |
 | --- | --- | --- |
 | `GET` | `/health` | Health check |
-| `POST` | `/auth/register` | Register and receive an access token |
-| `POST` | `/auth/login` | Sign in and receive an access token |
+| `POST` | `/auth/register` | Register and receive access and refresh tokens |
+| `POST` | `/auth/login` | Sign in and receive access and refresh tokens |
+| `POST` | `/auth/refresh` | Rotate a refresh token and receive a new token pair |
 | `GET` | `/users/me` | Read the current user profile |
 | `PATCH` | `/users/me` | Update the current user's name |
 | `GET` | `/todos` | List the current user's todos |
@@ -127,8 +128,12 @@ authenticated user. The built-in rate limiter is process-local; use a shared
 rate-limiting store if deploying multiple workers.
 
 Import `postman/todo-api.postman_collection.json` into Postman to try the
-endpoints. Run **Auth → Register** first; it saves the access token used by
-protected requests.
+endpoints. Run **Auth → Register** first; it saves the access and refresh
+tokens. The access token is used by protected requests. When it expires, send
+the current refresh token to `/auth/refresh`; each successful refresh rotates
+the refresh token, so clients must replace both saved tokens with the response.
+Refresh tokens expire after seven days by default (`REFRESH_TOKEN_EXPIRE_DAYS`)
+and can only be used once.
 
 ## Run integration tests
 

@@ -2,8 +2,13 @@ from fastapi import APIRouter, Depends, status
 from pymongo.database import Database
 
 from app.dependencies.database import get_database
-from app.modules.auth.controller import login, register
-from app.modules.auth.schemas import LoginRequest, RegisterRequest, TokenResponse
+from app.modules.auth.controller import login, refresh, register
+from app.modules.auth.schemas import (
+    LoginRequest,
+    RefreshRequest,
+    RegisterRequest,
+    TokenResponse,
+)
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -26,3 +31,11 @@ def login_endpoint(
     database: Database = Depends(get_database),
 ) -> TokenResponse:
     return login(database, payload)
+
+
+@router.post("/refresh", response_model=TokenResponse)
+def refresh_endpoint(
+    payload: RefreshRequest,
+    database: Database = Depends(get_database),
+) -> TokenResponse:
+    return refresh(database, payload)
