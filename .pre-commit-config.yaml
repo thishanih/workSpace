@@ -3,17 +3,17 @@ repos:
     hooks:
       - id: ruff-format
         name: Format Python with Ruff
-        entry: python3 -m ruff format
+        entry: .venv/bin/python -m ruff format
         language: system
         types: [python]
       - id: ruff-check
         name: Lint Python with Ruff
-        entry: python3 -m ruff check --fix
+        entry: .venv/bin/python -m ruff check --fix
         language: system
         types: [python]
       - id: pytest
         name: Run tests
-        entry: python3 -m pytest
+        entry: .venv/bin/python -m pytest
         language: system
         pass_filenames: false
         always_run: true

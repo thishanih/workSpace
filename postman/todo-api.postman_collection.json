@@ -1,0 +1,895 @@
+{
+  "info": {
+    "name": "Workspace API",
+    "description": "Postman requests for the FastAPI Workspace API. Start the API and MongoDB before sending requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "url": "{{baseUrl}}/api/health"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"returns HTTP 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"returns healthy status\", function () {",
+                  "    pm.expect(pm.response.json()).to.eql({ status: \"ok\" });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Health Check - success",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"status\": \"ok\"\n}",
+              "originalRequest": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "url": "{{baseUrl}}/api/health"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{$randomEmail}}\",\n  \"name\": \"Workspace API User\",\n  \"password\": \"change-this-password\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/auth/register"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"registers successfully\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "const data = pm.response.json();",
+                  "pm.collectionVariables.set(\"accessToken\", data.access_token);",
+                  "pm.collectionVariables.set(\"refreshToken\", data.refresh_token);",
+                  "pm.collectionVariables.set(\"email\", data.user.email);"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Register - success",
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"access_token\": \"<access-token>\",\n  \"refresh_token\": \"<refresh-token>\",\n  \"token_type\": \"bearer\",\n  \"user\": {\n    \"id\": \"64a000000000000000000001\",\n    \"email\": \"postman@example.com\",\n    \"name\": \"Workspace API User\",\n    \"created_at\": \"2026-01-15T10:30:00Z\"\n  }\n}",
+              "originalRequest": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{$randomEmail}}\",\n  \"name\": \"Workspace API User\",\n  \"password\": \"change-this-password\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}/api/auth/register"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"change-this-password\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/auth/login"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"logs in successfully\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "const data = pm.response.json();",
+                  "pm.collectionVariables.set(\"accessToken\", data.access_token);",
+                  "pm.collectionVariables.set(\"refreshToken\", data.refresh_token);"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Login - success",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"access_token\": \"<access-token>\",\n  \"refresh_token\": \"<refresh-token>\",\n  \"token_type\": \"bearer\",\n  \"user\": {\n    \"id\": \"64a000000000000000000001\",\n    \"email\": \"postman@example.com\",\n    \"name\": \"Workspace API User\",\n    \"created_at\": \"2026-01-15T10:30:00Z\"\n  }\n}",
+              "originalRequest": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"change-this-password\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}/api/auth/login"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Refresh Tokens",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"{{refreshToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/auth/refresh"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"refreshes tokens successfully\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "const data = pm.response.json();",
+                  "pm.collectionVariables.set(\"accessToken\", data.access_token);",
+                  "pm.collectionVariables.set(\"refreshToken\", data.refresh_token);"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Refresh Tokens - success",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"access_token\": \"<access-token>\",\n  \"refresh_token\": \"<refresh-token>\",\n  \"token_type\": \"bearer\",\n  \"user\": {\n    \"id\": \"64a000000000000000000001\",\n    \"email\": \"postman@example.com\",\n    \"name\": \"Workspace API User\",\n    \"created_at\": \"2026-01-15T10:30:00Z\"\n  }\n}",
+              "originalRequest": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"refresh_token\": \"{{refreshToken}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}/api/auth/refresh"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get My Profile",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/users/me"
+          },
+          "response": [
+            {
+              "name": "Get My Profile - success",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": \"64a000000000000000000001\",\n  \"email\": \"postman@example.com\",\n  \"name\": \"Workspace API User\",\n  \"created_at\": \"2026-01-15T10:30:00Z\"\n}",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/users/me"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update My Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Workspace API User\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/users/me"
+          },
+          "response": [
+            {
+              "name": "Update My Profile - success",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": \"64a000000000000000000001\",\n  \"email\": \"postman@example.com\",\n  \"name\": \"Updated Workspace API User\",\n  \"created_at\": \"2026-01-15T10:30:00Z\"\n}",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Updated Workspace API User\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}/api/users/me"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Todos",
+      "item": [
+        {
+          "name": "List Todos",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/todos?page=1&page_size=20"
+          },
+          "response": [
+            {
+              "name": "List Todos - success",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"64a000000000000000000002\",\n      \"title\": \"Try the Workspace API\",\n      \"description\": \"Created from Postman\",\n      \"status\": \"pending\",\n      \"created_at\": \"2026-01-15T10:35:00Z\",\n      \"updated_at\": \"2026-01-15T10:35:00Z\"\n    }\n  ],\n  \"page\": 1,\n  \"page_size\": 20,\n  \"total\": 1\n}",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/todos?page=1&page_size=20"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Todo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Try the Workspace API\",\n  \"description\": \"Created from Postman\",\n  \"status\": \"pending\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/todos"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"creates a todo\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.collectionVariables.set(\"todoId\", pm.response.json().id);"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Create Todo - success",
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": \"64a000000000000000000002\",\n  \"title\": \"Try the Workspace API\",\n  \"description\": \"Created from Postman\",\n  \"status\": \"pending\",\n  \"created_at\": \"2026-01-15T10:35:00Z\",\n  \"updated_at\": \"2026-01-15T10:35:00Z\"\n}",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Try the Workspace API\",\n  \"description\": \"Created from Postman\",\n  \"status\": \"pending\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}/api/todos"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Todo",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/todos/{{todoId}}"
+          },
+          "response": [
+            {
+              "name": "Get Todo - success",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": \"64a000000000000000000002\",\n  \"title\": \"Try the Workspace API\",\n  \"description\": \"Created from Postman\",\n  \"status\": \"pending\",\n  \"created_at\": \"2026-01-15T10:35:00Z\",\n  \"updated_at\": \"2026-01-15T10:35:00Z\"\n}",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/todos/{{todoId}}"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Todo",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/todos/{{todoId}}"
+          },
+          "response": [
+            {
+              "name": "Update Todo - success",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": \"64a000000000000000000002\",\n  \"title\": \"Try the Workspace API\",\n  \"description\": \"Created from Postman\",\n  \"status\": \"completed\",\n  \"created_at\": \"2026-01-15T10:35:00Z\",\n  \"updated_at\": \"2026-01-15T10:40:00Z\"\n}",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"completed\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}/api/todos/{{todoId}}"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete Todo",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/todos/{{todoId}}"
+          },
+          "response": [
+            {
+              "name": "Delete Todo - success",
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": "",
+              "originalRequest": {
+                "method": "DELETE",
+                "url": "{{baseUrl}}/api/todos/{{todoId}}"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "List Todo Comments",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/todos/{{todoId}}/comments?page=1&page_size=20"
+          },
+          "response": [
+            {
+              "name": "List Todo Comments - success",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"64a000000000000000000003\",\n      \"todo_id\": \"64a000000000000000000002\",\n      \"author_id\": \"64a000000000000000000001\",\n      \"body\": \"A comment from Postman\",\n      \"created_at\": \"2026-01-15T10:36:00Z\",\n      \"updated_at\": \"2026-01-15T10:36:00Z\"\n    }\n  ],\n  \"page\": 1,\n  \"page_size\": 20,\n  \"total\": 1\n}",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/todos/{{todoId}}/comments?page=1&page_size=20"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Todo Comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"body\": \"A comment from Postman\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/todos/{{todoId}}/comments"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"creates a comment\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.collectionVariables.set(\"commentId\", pm.response.json().id);"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Create Todo Comment - success",
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": \"64a000000000000000000003\",\n  \"todo_id\": \"64a000000000000000000002\",\n  \"author_id\": \"64a000000000000000000001\",\n  \"body\": \"A comment from Postman\",\n  \"created_at\": \"2026-01-15T10:36:00Z\",\n  \"updated_at\": \"2026-01-15T10:36:00Z\"\n}",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"body\": \"A comment from Postman\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}/api/todos/{{todoId}}/comments"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Todo Comment",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"body\": \"Updated comment from Postman\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/todos/{{todoId}}/comments/{{commentId}}"
+          },
+          "response": [
+            {
+              "name": "Update Todo Comment - success",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": \"64a000000000000000000003\",\n  \"todo_id\": \"64a000000000000000000002\",\n  \"author_id\": \"64a000000000000000000001\",\n  \"body\": \"Updated comment from Postman\",\n  \"created_at\": \"2026-01-15T10:36:00Z\",\n  \"updated_at\": \"2026-01-15T10:41:00Z\"\n}",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"body\": \"Updated comment from Postman\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}/api/todos/{{todoId}}/comments/{{commentId}}"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete Todo Comment",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/todos/{{todoId}}/comments/{{commentId}}"
+          },
+          "response": [
+            {
+              "name": "Delete Todo Comment - success",
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": "",
+              "originalRequest": {
+                "method": "DELETE",
+                "url": "{{baseUrl}}/api/todos/{{todoId}}/comments/{{commentId}}"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Activities",
+      "item": [
+        {
+          "name": "List Activities",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/activities?page=1&page_size=20"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const items = pm.response.json().items;",
+                  "if (items && items.length > 0) {",
+                  "    pm.collectionVariables.set(\"activityId\", items[0].id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "List Activities - success",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"64a000000000000000000004\",\n      \"todo_id\": \"64a000000000000000000002\",\n      \"actor_id\": \"64a000000000000000000001\",\n      \"action\": \"created\",\n      \"entity_type\": \"todo\",\n      \"entity_id\": \"64a000000000000000000002\",\n      \"summary\": \"Created todo: Try the Workspace API\",\n      \"created_at\": \"2026-01-15T10:35:00Z\"\n    }\n  ],\n  \"page\": 1,\n  \"page_size\": 20,\n  \"total\": 1\n}",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/activities?page=1&page_size=20"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Activity",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/activities/{{activityId}}"
+          },
+          "response": [
+            {
+              "name": "Get Activity - success",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": \"64a000000000000000000004\",\n  \"todo_id\": \"64a000000000000000000002\",\n  \"actor_id\": \"64a000000000000000000001\",\n  \"action\": \"created\",\n  \"entity_type\": \"todo\",\n  \"entity_id\": \"64a000000000000000000002\",\n  \"summary\": \"Created todo: Try the Workspace API\",\n  \"created_at\": \"2026-01-15T10:35:00Z\"\n}",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/activities/{{activityId}}"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8000"
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    },
+    {
+      "key": "email",
+      "value": ""
+    },
+    {
+      "key": "todoId",
+      "value": ""
+    },
+    {
+      "key": "commentId",
+      "value": ""
+    },
+    {
+      "key": "activityId",
+      "value": ""
+    }
+  ]
+}
