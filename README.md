@@ -219,9 +219,26 @@ instead of silently choosing a behavior.
 
 ## Run integration tests
 
+Integration tests use a fresh in-memory MongoDB mock per test and do not use
+ordinary database data. Install the development dependencies first. Run the
+endpoint suite twice to verify it is repeatable:
+
+```bash
+python -m pytest tests/integration
+python -m pytest tests/integration
+```
+
+Run the complete test suite with:
+
 ```bash
 python -m pytest
 ```
+
+The mock-based suite verifies application endpoint behavior and isolation; it
+does not verify real MongoDB TTL timing, database concurrency, or performance.
+See the
+[endpoint coverage matrix](specs/001-api-endpoint-tests/contracts/endpoint-coverage.md)
+for the scenarios mapped to each route.
 
 ## Checks before committing
 
