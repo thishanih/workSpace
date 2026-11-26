@@ -1,4 +1,5 @@
 from collections.abc import Callable, Iterator
+from datetime import datetime, timezone
 from typing import Any
 
 import mongomock
@@ -24,6 +25,10 @@ def _rate_limit_middleware() -> RateLimitMiddleware | None:
     return None
 
 
+def _mongomock_utcnow() -> datetime:
+    return datetime.now(timezone.utc).replace(tzinfo=None)
+
+
 @pytest.fixture(autouse=True)
 def verify_test_fixture_cleanup() -> Iterator[None]:
     previous_overrides = app.dependency_overrides.copy()
@@ -46,6 +51,7 @@ def client(monkeypatch: pytest.MonkeyPatch) -> Iterator[TestClient]:
     previous_secret = settings.jwt_secret_key
     app.dependency_overrides[get_database] = lambda: database
     initialize_indexes(database)
+    monkeypatch.setattr(mongomock, "utcnow", _mongomock_utcnow)
     monkeypatch.setattr(settings, "jwt_secret_key", SecretStr(TEST_SECRET))
 
     try:
