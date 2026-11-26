@@ -127,6 +127,14 @@ accept `page` and `page_size` query parameters. Data access is scoped to the
 authenticated user. The built-in rate limiter is process-local; use a shared
 rate-limiting store if deploying multiple workers.
 
+### Request validation errors
+
+Invalid request bodies and query parameters return HTTP 422 with a JSON `detail`
+array. Each issue contains `loc` (the input location), `msg` (a concise reason),
+and `type` (the validation category). The response does not echo submitted
+values, request bodies, or internal diagnostics. Authentication failures remain
+401, and malformed or missing resource identifiers remain 404.
+
 Import `postman/todo-api.postman_collection.json` into Postman to try the
 endpoints. Run **Auth → Register** first; it saves the access and refresh
 tokens. The access token is used by protected requests. When it expires, send

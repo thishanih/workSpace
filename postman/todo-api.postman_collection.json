@@ -149,6 +149,42 @@
                 },
                 "url": "{{baseUrl}}/api/auth/register"
               }
+            },
+            {
+              "name": "Register - invalid email (422)",
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"detail\": [\n    {\n      \"type\": \"value_error\",\n      \"loc\": [\n        \"body\",\n        \"email\"\n      ],\n      \"msg\": \"value is not a valid email address: An email address must have an @-sign.\"\n    }\n  ]\n}",
+              "originalRequest": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"not-an-email\",\n  \"name\": \"Postman Example\",\n  \"password\": \"valid-password\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}/api/auth/register"
+              }
             }
           ]
         },
@@ -428,6 +464,24 @@
                 "method": "GET",
                 "url": "{{baseUrl}}/api/todos?page=1&page_size=20"
               }
+            },
+            {
+              "name": "List Todos - invalid page (422)",
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"detail\": [\n    {\n      \"type\": \"greater_than_equal\",\n      \"loc\": [\n        \"query\",\n        \"page\"\n      ],\n      \"msg\": \"Input should be greater than or equal to 1\"\n    }\n  ]\n}",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/todos?page=0&page_size=20"
+              }
             }
           ]
         },
@@ -491,6 +545,39 @@
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"title\": \"Try the Workspace API\",\n  \"description\": \"Created from Postman\",\n  \"status\": \"pending\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}/api/todos"
+              }
+            },
+            {
+              "name": "Create Todo - invalid title (422)",
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"detail\": [\n    {\n      \"type\": \"string_too_short\",\n      \"loc\": [\n        \"body\",\n        \"title\"\n      ],\n      \"msg\": \"String should have at least 1 character\"\n    }\n  ]\n}",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \" \"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -708,6 +795,39 @@
                 },
                 "url": "{{baseUrl}}/api/todos/{{todoId}}/comments"
               }
+            },
+            {
+              "name": "Create Todo Comment - invalid body (422)",
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"detail\": [\n    {\n      \"type\": \"string_too_short\",\n      \"loc\": [\n        \"body\",\n        \"body\"\n      ],\n      \"msg\": \"String should have at least 1 character\"\n    }\n  ]\n}",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"body\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{baseUrl}}/api/todos/{{todoId}}/comments"
+              }
             }
           ]
         },
@@ -832,6 +952,24 @@
               "originalRequest": {
                 "method": "GET",
                 "url": "{{baseUrl}}/api/activities?page=1&page_size=20"
+              }
+            },
+            {
+              "name": "List Activities - invalid page size (422)",
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"detail\": [\n    {\n      \"type\": \"less_than_equal\",\n      \"loc\": [\n        \"query\",\n        \"page_size\"\n      ],\n      \"msg\": \"Input should be less than or equal to 100\"\n    }\n  ]\n}",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/activities?page=1&page_size=101"
               }
             }
           ]

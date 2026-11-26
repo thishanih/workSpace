@@ -1,6 +1,6 @@
 from typing import Any
 
-from fastapi import APIRouter, Depends, Query, Response, status
+from fastapi import APIRouter, Depends, Response, status
 from pymongo.database import Database
 
 from app.dependencies.auth import get_current_user
@@ -13,6 +13,7 @@ from app.modules.todos.controller import (
     remove_todo,
 )
 from app.modules.todos.schemas import TodoCreate, TodoRead, TodoUpdate
+from app.utils.validation import PageNumber, PageSize
 
 router = APIRouter(prefix="/todos", tags=["todos"])
 
@@ -28,8 +29,8 @@ def create_todo(
 
 @router.get("")
 def list_todos(
-    page: int = Query(default=1, ge=1),
-    page_size: int = Query(default=20, ge=1, le=100),
+    page: PageNumber = 1,
+    page_size: PageSize = 20,
     database: Database = Depends(get_database),
     user: dict[str, Any] = Depends(get_current_user),
 ) -> dict[str, Any]:

@@ -1,20 +1,21 @@
 from typing import Any
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends
 from pymongo.database import Database
 
 from app.dependencies.auth import get_current_user
 from app.dependencies.database import get_database
 from app.modules.activities.controller import get_activity_by_id, get_activity_list
 from app.modules.activities.schemas import ActivityRead
+from app.utils.validation import PageNumber, PageSize
 
 router = APIRouter(prefix="/activities", tags=["activities"])
 
 
 @router.get("")
 def list_user_activities(
-    page: int = Query(default=1, ge=1),
-    page_size: int = Query(default=20, ge=1, le=100),
+    page: PageNumber = 1,
+    page_size: PageSize = 20,
     todo_id: str | None = None,
     database: Database = Depends(get_database),
     user: dict[str, Any] = Depends(get_current_user),
